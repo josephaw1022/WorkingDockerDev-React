@@ -1,0 +1,11 @@
+env:
+   browser: true
+
+rules:
+   strict: 2
+   no-implicit-globals: 1
+   no-alert: 2
+   no-console: 1
+   no-implied-eval: 2
+   no-eval: 2
+   no-useless-call: 2

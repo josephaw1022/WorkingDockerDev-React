@@ -1,58 +1,60 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import { useAppDispatch } from './redux/hooks';
+import { Route, Routes, To, useNavigate, RouteObject } from 'react-router-dom';
+import { PageProps } from './models/page';
+import { reset } from './redux/entities/page/page.slice';
+import { AboutPage } from './views/About';
+import { HomePage } from './views/Home';
 
-function App() {
+
+export default function App() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate()
+
+  /**
+   * changePage - change the page of the application through changePage callback in every page's props 
+   * @param pageRoute - route for the page 
+   */
+  const changePage = (pageRoute: To):void => {
+    dispatch(reset())
+    navigate(pageRoute)
+  }
+
+  /**
+   * changeState - call a redux action in our application through the props 
+   * @param reduxAction - an action defined in a redux slice or a redux thunk action 
+   */
+  const changeState = (reduxAction: CallableFunction): void => {
+    dispatch(reduxAction());
+  }
+
+  /**
+   * props passed down to every page 
+   */
+  const pageProps = {
+    changePage: page => changePage(page),
+    changeState: func => changeState(func)
+  } as PageProps
+
+  /**
+   * all the routes for the application 
+   */
+  const routes: RouteObject[] = [
+    {
+      element: <HomePage {...pageProps} />,
+      path: "/"
+    },
+    {
+      element: <AboutPage {...pageProps} />,
+      path: "/about"
+    }
+  ]
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
+    <Routes>
+      {routes.map((route, index) => <Route {...route} key={index} />)}
+    </Routes>
+  )
+
 }
 
-export default App;

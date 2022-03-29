@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"moduleResolution": "node",
+		"paths": {
+			"@app/*": ["src/*"],
+			"@styles/*": ["src/styles/*"], 
+			"@redux/*": ["src/redux/*"], 
+			"@components/*": ["src/components/*"]
+		}
+	}
+}
